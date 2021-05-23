@@ -1,0 +1,23 @@
+dimension_reduction=function(data_A,G1_D,filename,folder,select_cluster,proportion){
+M_data=G1_D$M_data
+if(length(select_cluster)!=length(proportion)){
+	print("挑選群數或挑選比例不一致")
+}else{
+	cluster=as.data.frame(read.csv(file=paste0("Result/",folder,"/",filename,"fcm_phase_cluster.csv"),1))[-1]
+	cluster_evaluation=as.data.frame(read.csv(file=paste0("Result/",folder,"/",filename,"fcm_clusters_evaluation.csv"),1))[-1]
+	for(i in 1:length(select_cluster)){
+	random=sample(which(cluster==select_cluster[i]),ceiling(proportion[i]*length(which(cluster==select_cluster[i]))))
+	if(i==1){
+		a=data_A[random]
+		b=M_data[random]
+	}else{
+		a=cbind(a,data_A[random])
+		b=cbind(b,M_data[random])
+	}
+	}
+	data_A=a
+	G1_D=list(M_data=b,time_1=G1_D$time_1)
+	answer=list(data_A=data_A,G1_D=G1_D)
+}
+return(answer)
+}

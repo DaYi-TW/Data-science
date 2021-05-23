@@ -1,0 +1,13 @@
+transpose_dataset=function(filename){
+data_A=as.data.frame(read.csv(file=paste0("DataSet/",filename,".csv"),1))
+data_A=as.data.frame(t(data_A))
+data_B=parSapply(cl,1:(ncol(data_A)),function(i,data_A){
+	after=as.numeric(as.character(data_A[,i]))
+	return(after)
+},data_A)
+data_B=data_B[-1,]
+data_B=as.data.frame(data_B)
+colnames(data_B)=as.character(t(data_A[1,]))
+data_A=data_B
+return(data_A)
+}
